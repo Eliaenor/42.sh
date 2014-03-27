@@ -17,6 +17,7 @@
 static void		ft_change_part2(char **args, char *env_pwd, t_data *st)
 {
 	char	*path;
+	char	*tmp;
 
 	if (args[1] && ft_strcmp(args[1], "-") == 0)
 	{
@@ -27,13 +28,19 @@ static void		ft_change_part2(char **args, char *env_pwd, t_data *st)
 	}
 	else if (args[1] && args[1][0] == '~')
 	{
-		path = ft_strjoin(ft_getenv(st->envtab, "HOME"), "/");
-		path = ft_strjoin(path, &(args[1][1]));
+		tmp = ft_getenv(st->envtab, "HOME");
+		if (tmp == NULL)
+			path = "/";
+		else
+		{
+			path = ft_strjoin(ft_getenv(st->envtab, "HOME"), "/");
+			path = ft_strjoin(path, &(args[1][1]));
+		}
 		chdir(path);
 	}
 }
 
-static void		check_right(char **path, char **args, t_data *st)
+static int		check_right(char **path, char **args, t_data *st)
 {
 	struct stat		stats;
 
@@ -55,20 +62,25 @@ static void		check_right(char **path, char **args, t_data *st)
 		ft_putendl(args[1]);
 		*path = ft_getenv(st->envtab, "PWD");
 	}
+	else
+		return (0);
+	return (1);
 }
 
 int				sh_cd(t_data *st)
 {
 	char	*env_pwd;
 	char	*path;
+	int		ret;
 
+	ret = 0;
 	env_pwd = ft_strjoin(ft_getenv(st->envtab, "PWD"), "/");
 	if (st->cmd[1] && (ft_strcmp(st->cmd[1], "-") == 0 || st->cmd[1][0] == '~'))
 		ft_change_part2(st->cmd, env_pwd, st);
 	else if (st->cmd[1])
 	{
 		path = ft_strjoin(env_pwd, st->cmd[1]);
-		check_right(&path, st->cmd, st);
+		ret = check_right(&path, st->cmd, st);
 		set_var_env(st, ft_strjoin("OLDPWD=", getcwd(NULL, 1024)));
 		path = (st->cmd[1][0] == '/' ? st->cmd[1] : path);
 		chdir(path);
@@ -77,9 +89,9 @@ int				sh_cd(t_data *st)
 	{
 		path = ft_getenv(st->envtab, "HOME");
 		set_var_env(st, ft_strjoin("OLDPWD=", getcwd(NULL, 1024)));
-		chdir(path);
+		chdir(path ? path : "/");
 	}
 	free(env_pwd);
 	set_var_env(st, ft_strjoin("PWD=", getcwd(NULL, 1024)));
-	return (0);
+	return (ret);
 }

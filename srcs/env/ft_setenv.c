@@ -50,7 +50,7 @@ int				set_var_env(t_data *st, char *line)
 	char	**envtmp;
 
 	if (!ft_strchr(line, '='))
-		return (0);
+		return (1);
 	if (!(envtmp = check_env(line, st)))
 	{
 		if (!add_env(line, st))
@@ -58,23 +58,25 @@ int				set_var_env(t_data *st, char *line)
 	}
 	else
 		*check_env(line, st) = ft_strdup(line);
-	return (1);
+	return (0);
 }
 
 int				sh_setenv(t_data *st)
 {
 	int		i;
+	int		ret;
 
 	i = 1;
+	ret = 1;
 	if (!st->cmd[1])
-		ft_putenv(st);
+		return (ft_putenv(st));
 	else
 	{
 		while (st->cmd[i])
 		{
-			set_var_env(st, st->cmd[i]);
+			ret = set_var_env(st, st->cmd[i]);
 			i++;
 		}
 	}
-	return (1);
+	return (ret);
 }

@@ -44,9 +44,17 @@ int			sh_unsetenv(t_data *st)
 	while (st->cmd[i])
 		i++;
 	if (i > 2)
-		return (!write(2, "unsetenv: too many arguments.\n", 43));
+	{
+		ft_putendl("unsetenv: too many arguments.");
+		return (1);
+	}
+	if (i < 2)
+	{
+		ft_putendl("unsetenv: too few arguments.");
+		return (1);
+	}
 	i = 1;
 	while (st->cmd[i])
 		del_to_env(st, st->cmd[i++]);
-	return (1);
+	return (0);
 }

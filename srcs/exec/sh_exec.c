@@ -28,7 +28,6 @@ void	sh_split_cmd(t_data *st, t_parse *node)
 
 int		sh_cmd_exec(t_data *st, t_parse *node)
 {
-	int		success_cmd;
 	int		ret;
 
 	ret = 0;
@@ -37,7 +36,7 @@ int		sh_cmd_exec(t_data *st, t_parse *node)
 		sh_split_cmd(st, node);
 		if (node->range == -1)
 		{
-			if (!(success_cmd = select_builtin(st)))
+			if (select_builtin(st))
 				ret = sh_isnobuiltin(st);
 		}
 		else

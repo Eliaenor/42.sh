@@ -14,25 +14,23 @@
 
 void	base_env(char **environ, t_data *st)
 {
-	char		*pwd;
 	char		*lvl;
 
 	create_envtab(st, environ);
-	pwd = NULL;
-	pwd = getcwd(NULL, 1024);
+	lvl = NULL;
 	lvl = ft_getenv(st->envtab, "SHLVL");
-	if (!ft_getenv(st->envtab, "PWD"))
-		set_var_env(st, ft_strjoin("PWD=", pwd));
-	if (!ft_getenv(st->envtab, "OLDPWD"))
-		set_var_env(st, ft_strjoin("OLDPWD=", pwd));
+	if (lvl)
+		set_var_env(st, ft_strjoin("SHLVL=", ft_itoa(ft_atoi(lvl) + 1)));
 	if (!ft_getenv(st->envtab, "HOME"))
 		set_var_env(st, "HOME=/");
+	if (!ft_getenv(st->envtab, "PWD"))
+		set_var_env(st, ft_strjoin("PWD=", getcwd(NULL, 1024)));
+	if (!ft_getenv(st->envtab, "OLDPWD"))
+		set_var_env(st, ft_strjoin("OLDPWD=", getcwd(NULL, 1024)));
 	if (!ft_getenv(st->envtab, "USER"))
 		set_var_env(st, "USER=USER");
 	if (!ft_getenv(st->envtab, "PATH"))
 		set_var_env(st, "PATH=/user/local/bin:/bin");
-	if (lvl)
-		set_var_env(st, ft_strjoin("SHLVL=", ft_itoa(ft_atoi(lvl) + 1)));
 }
 
 void	create_envtab(t_data *st, char **environ)

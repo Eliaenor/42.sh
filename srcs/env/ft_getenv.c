@@ -66,7 +66,7 @@ int		ft_putenv(t_data *st)
 		ft_putendl(st->envtab[i]);
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
 int		ft_tablen(char **tab)

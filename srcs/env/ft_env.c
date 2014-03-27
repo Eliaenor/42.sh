@@ -85,9 +85,9 @@ int				sh_env(t_data *st)
 	i = 1;
 	newenv = NULL;
 	if (!st->cmd[i])
-		ft_putenv(st);
+		return (ft_putenv(st));
 	else if (ft_strcmp(st->cmd[i], "-i") == 0 && !st->cmd[i + 1])
-		return (0);
+		return (1);
 	else if (ft_strcmp(st->cmd[i], "-i") == 0)
 	{
 		newenv = (char **)malloc(sizeof(char *));

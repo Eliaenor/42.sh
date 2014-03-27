@@ -28,13 +28,12 @@ int		select_builtin(t_data *st)
 	t_parse[4] = &sh_cd;
 	t_parse[5] = &sh_echo;
 	i = -1;
-	success_cmd = 0;
+	success_cmd = 1;
 	while (i++ < 5)
 	{
 		if (ft_strcmp(tab_builtin[i], st->cmd[0]) == 0)
 		{
-			t_parse[i](st);
-			success_cmd = 1;
+			success_cmd = t_parse[i](st);
 			i = 6;
 		}
 	}
